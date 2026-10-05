@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHRONOS // Odyssey into Deep Time & Stellar Genesis</title>
+    <meta name="description" content="A premium cinematic scroll-driven 3D storytelling web experience exploring the cosmic genesis from singularity to planetary consciousness." />
+    
+    <!-- Open Graph / Meta -->
+    <meta property="og:title" content="CHRONOS // Odyssey of Light" />
+    <meta property="og:description" content="Immersive 3D WebGL scroll-driven cosmic narrative." />
+    <meta property="og:type" content="website" />
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='black' stroke='%2300f0ff' stroke-width='4'/><circle cx='50' cy='50' r='18' fill='%23ffa020'/></svg>" />
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+
+    <!-- WebGL Canvas Container for Three.js 3D Universe -->
+    <div id="webgl-canvas-container" aria-hidden="true"></div>
+
+    <!-- Cinematic Vignette & Micro-Scanline Overlays -->
+    <div class="cinematic-vignette" aria-hidden="true"></div>
+    <div class="cinematic-scanlines" aria-hidden="true"></div>
+
+    <!-- Preloader & Calibration Sequence -->
+    <div id="cinematic-preloader">
+      <div class="preloader-monogram">CHRONOS</div>
+      <div class="preloader-subtitle">DEEP TIME TRANSMISSION // CALIBRATING WEBGL TELEMETRY</div>
+      
+      <div class="preloader-progress-wrap">
+        <div class="preloader-bar-bg">
+          <div class="preloader-bar-fill" id="preloader-fill"></div>
+        </div>
+        <div class="preloader-status-row">
+          <span id="preloader-status">ALIGNING CELESTIAL SENSORS</span>
+          <span id="preloader-percent">0%</span>
+        </div>
+      </div>
+
+      <button id="preloader-btn" class="preloader-enter-btn">
+        <span>INITIATE EXPEDITION</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Heads-Up Display (HUD) Telemetry Layer -->
+    <header class="hud-layer" role="banner">
+      <!-- Top Left: Brand & Telemetry Status -->
+      <div class="hud-top-left hud-interactive">
+        <div class="hud-brand">
+          <span class="hud-brand-title">CHRONOS</span>
+          <div class="hud-pill">
+            <span class="hud-pill-dot"></span>
+            <span id="hud-fps">60 FPS</span>
+          </div>
+        </div>
+        <div class="hud-subline" id="hud-act-name">SINGULARITY_CORE // 0.00 M_YR</div>
+      </div>
+
+      <!-- Top Right: Audio & Exploration Controls -->
+      <div class="hud-top-right hud-interactive">
+        <button id="hud-sound-toggle" class="hud-glass-button" title="Toggle Procedural Cosmic Audio" aria-label="Toggle Cosmic Audio">
+          <div class="audio-bars-wrap" aria-hidden="true">
+            <span class="audio-bar"></span>
+            <span class="audio-bar"></span>
+            <span class="audio-bar"></span>
+            <span class="audio-bar"></span>
+          </div>
+          <span>AUDIO: <strong class="sound-status">MUTED</strong></span>
+        </button>
+
+        <button id="hud-mode-toggle" class="hud-glass-button" title="Switch between scroll story and 360 orbit inspect mode">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
+          <span class="mode-text">STORY CRUISE</span>
+        </button>
+      </div>
+
+      <!-- Bottom Left: Precision Coordinates -->
+      <div class="hud-bottom-left hud-interactive">
+        <div class="telemetry-card">
+          <div class="telemetry-row">
+            <span>SECTOR COORD</span>
+            <span id="hud-coords">RA 18h 36m // DEC +38° 47′</span>
+          </div>
+          <div class="telemetry-row">
+            <span>CAMERA VECTOR</span>
+            <span id="hud-vector">X: 0.0  Y: 2.5  Z: 20.0</span>
+          </div>
+          <div class="telemetry-row">
+            <span>SPECTRAL ENGINE</span>
+            <span>THREE.JS GLSL SHADERS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Right: Interactive Chapters & Progress Scrub -->
+      <div class="hud-bottom-right hud-interactive">
+        <nav class="hud-chapters-list" aria-label="Narrative Acts">
+          <div class="hud-chapter-item active" data-act="0">
+            <span>01 // PRIMORDIAL</span>
+            <span class="hud-chapter-dot"></span>
+          </div>
+          <div class="hud-chapter-item" data-act="1">
+            <span>02 // IGNITION</span>
+            <span class="hud-chapter-dot"></span>
+          </div>
+          <div class="hud-chapter-item" data-act="2">
+            <span>03 // GENESIS</span>
+            <span class="hud-chapter-dot"></span>
+          </div>
+          <div class="hud-chapter-item" data-act="3">
+            <span>04 // MONOLITH</span>
+            <span class="hud-chapter-dot"></span>
+          </div>
+          <div class="hud-chapter-item" data-act="4">
+            <span>05 // TRANSCENDENCE</span>
+            <span class="hud-chapter-dot"></span>
+          </div>
+        </nav>
+
+        <div class="hud-scrub-wrap">
+          <div class="hud-progress-track">
+            <div id="hud-progress-fill"></div>
+          </div>
+          <span id="hud-progress-percent">00%</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Scrollable Storyline Content Container -->
+    <main id="story-container">
+      
+      <!-- ACT I: The Primordial Silence -->
+      <section class="story-act align-left" id="act-0" data-act-section="0">
+        <div class="narrative-card">
+          <div class="act-badge">ACT 01 // DEEP TIME ORIGIN</div>
+          <h1 class="act-title">THE VOID SINGULARITY</h1>
+          <p class="act-description">
+            Before the stellar crucible ignited, infinite cosmic silence prevailed. Suspended within a shroud of primordial quantum dust, an enigmatic gravitational singularity curved spacetime into an absolute horizon—holding the dormant seeds of all celestial matter in poised equilibrium.
+          </p>
+          
+          <div class="act-metrics-grid">
+            <div class="act-metric-card">
+              <span class="metric-label">Gravitational Density</span>
+              <span class="metric-val">1.42 × 10¹⁸ kg/m³</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Event Horizon</span>
+              <span class="metric-val">4.20 AU Radius</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Hawking Radiance</span>
+              <span class="metric-val">0.0024 Kelvin</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Quantum Equilibrium</span>
+              <span class="metric-val">99.98% Coherence</span>
+            </div>
+          </div>
+
+          <div class="act-action-row">
+            <button class="cinematic-cta jump-act-btn" data-target="1">
+              <span>EXPLORE IGNITION</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </button>
+            <span class="cinematic-secondary-link mode-hint">CLICK HUD TO FREE-ORBIT</span>
+          </div>
+        </div>
+
+        <div class="scroll-indicator-wrap" aria-hidden="true">
+          <span class="scroll-text">SCROLL TO TRAVERSE TIME</span>
+          <div class="scroll-line-motion"></div>
+        </div>
+      </section>
+
+      <!-- ACT II: The Quantum Ignition -->
+      <section class="story-act align-right" id="act-1" data-act-section="1">
+        <div class="narrative-card">
+          <div class="act-badge badge-amber">ACT 02 // +1.48 MILLION YEARS</div>
+          <h2 class="act-title">THE STELLAR CRUCIBLE</h2>
+          <p class="act-description">
+            Quantum destabilization fractures the accretion torus. Unstable gravitational shear triggers thermonuclear ignition at the core. Massive twin relativistic plasma jets erupt along magnetic poles at near-luminal velocity, illuminating the dark nebula with incandescent amber solar flares.
+          </p>
+
+          <div class="act-metrics-grid">
+            <div class="act-metric-card">
+              <span class="metric-label">Core Temperature</span>
+              <span class="metric-val">1.85 × 10⁷ Kelvin</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Thermal Luminosity</span>
+              <span class="metric-val">3.84 × 10²⁶ Watts</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Relativistic Jet Speed</span>
+              <span class="metric-val">0.92 c (Velocity)</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Magnetic Field Flux</span>
+              <span class="metric-val">4.2 × 10⁴ Tesla</span>
+            </div>
+          </div>
+
+          <div class="act-action-row">
+            <button class="cinematic-cta jump-act-btn" data-target="2">
+              <span>ADVANCE TO GENESIS</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III: The Planetary Genesis -->
+      <section class="story-act align-left" id="act-2" data-act-section="2">
+        <div class="narrative-card">
+          <div class="act-badge">ACT 03 // +4.10 MILLION YEARS</div>
+          <h2 class="act-title">PLANETARY FORGE</h2>
+          <p class="act-description">
+            From the turbulent debris disk, electrostatic coalescence gives birth to a primordial planetary body. Molten basalt tectonic plates fracture over glowing geothermal rifts, while cyan Rayleigh-scattering atmosphere condenses under resonant magnetic field lines.
+          </p>
+
+          <div class="act-metrics-grid">
+            <div class="act-metric-card">
+              <span class="metric-label">Surface Magma Heat</span>
+              <span class="metric-val">1,840 Kelvin</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Orbital Debris Mass</span>
+              <span class="metric-val">2.14 × 10²⁴ kg</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Atmospheric Corona</span>
+              <span class="metric-val">420 km Cyan Halo</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Asteroid Belt Density</span>
+              <span class="metric-val">350 Tracked Bodies</span>
+            </div>
+          </div>
+
+          <div class="act-action-row">
+            <button class="cinematic-cta jump-act-btn" data-target="3">
+              <span>APPROACH MONOLITH</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT IV: The Conscious Monolith -->
+      <section class="story-act align-right" id="act-3" data-act-section="3">
+        <div class="narrative-card">
+          <div class="act-badge badge-violet">ACT 04 // +8.90 MILLION YEARS</div>
+          <h2 class="act-title">THE DYSON MONOLITH</h2>
+          <p class="act-description">
+            A hyper-advanced civilization weaves concentric megastructure rings around the planetary heart. Rotating gyroscopic Dyson arrays and laser interferometry guides harvest cosmic energy with infinite mathematical precision, transforming the celestial sphere into a living conscious node.
+          </p>
+
+          <div class="act-metrics-grid">
+            <div class="act-metric-card">
+              <span class="metric-label">Energy Harvesting</span>
+              <span class="metric-val">100% Type II Swarm</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Array Symmetry</span>
+              <span class="metric-val">4-Tier Gyroscopic</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Laser Grid Coherence</span>
+              <span class="metric-val">Phase-Locked 0.04 nm</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Singularity Tap</span>
+              <span class="metric-val">Stable Resonance</span>
+            </div>
+          </div>
+
+          <div class="act-action-row">
+            <button class="cinematic-cta jump-act-btn" data-target="4">
+              <span>ENTER TRANSCENDENCE</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT V: The Transcendent Horizon -->
+      <section class="story-act align-center" id="act-4" data-act-section="4">
+        <div class="narrative-card finale-card">
+          <div class="act-badge badge-magenta">ACT 05 // ETERNAL ARCHITECTURE</div>
+          <h2 class="act-title">TRANSCENDENT HORIZON</h2>
+          <p class="act-description">
+            The hyper-dimensional bridge opens. Starlight filaments compress into a warp vortex corridor, folding space and time into pure geometry. The cosmos is no longer an abyss to fear, but an eternal symphony to navigate.
+          </p>
+
+          <div class="act-metrics-grid">
+            <div class="act-metric-card">
+              <span class="metric-label">Warp Velocity</span>
+              <span class="metric-val">Hyperluminal</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Metric Distortion</span>
+              <span class="metric-val">Non-Euclidean</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Temporal Variance</span>
+              <span class="metric-val">0.000 s Drift</span>
+            </div>
+            <div class="act-metric-card">
+              <span class="metric-label">Dimensional State</span>
+              <span class="metric-val">5D Inhabited</span>
+            </div>
+          </div>
+
+          <div class="finale-actions">
+            <button id="finale-orbit-btn" class="cinematic-cta">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20M2 12h20"/></svg>
+              <span>UNLOCK FREE 3D ORBIT</span>
+            </button>
+            <button id="finale-replay-btn" class="cinematic-cta" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <span>REPLAY TRANSMISSION</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
